@@ -9,6 +9,9 @@ import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { useHistory } from "react-router";
+// import { loadStripe } from "@stripe/stripe-js";
+
+require("dotenv").config();
 
 const KEY = process.env.REACT_APP_STRIPE;
 
@@ -173,7 +176,7 @@ const Cart = () => {
       try {
         const res = await userRequest.post("/checkout/payment", {
           tokenId: stripeToken.id,
-          amount: 500,
+          amount: cart.total * 100,
         });
         history.push("/success", {
           stripeData: res.data,
@@ -182,6 +185,7 @@ const Cart = () => {
       } catch {}
     };
     stripeToken && makeRequest();
+    // eslint-disable-next-line
   }, [stripeToken, cart.total, history]);
   return (
     <Container>
